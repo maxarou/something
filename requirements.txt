@@ -1,0 +1,13 @@
+numpy
+matplotlib
+pymongo
+notebook
+Jupyter
+streamlit
+pandas
+scikit-learn
+seaborn
+requests
+plotly
+tensorflow
+keras

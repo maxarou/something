@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+
+  app:
+    build: .
+    container_name: robot_exploration_app
+    volumes:
+      - ./:/workspace
+    ports:
+      - "8888:8888"       # Jupyter
+      - "8501:8501"       # Streamlit
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/robotdb
+    depends_on:
+      - mongo
+    command: >
+      bash -c "
+      jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root --no-browser --NotebookApp.token='' &&
+      streamlit run notebooks/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+      "
+
+  mongo:
+    image: mongo:7
+    container_name: robot_exploration_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
+volumes:
+  mongo_data:
